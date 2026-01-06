@@ -2,7 +2,7 @@
 
 # Blogger AI Automation Case Study 🚀
 
-**Author:** ubagyan  
+**Author:** drhanhtetsan  
 **Tech Stack:** Google Apps Script · Gemini API · Pexels API · Blogger API · Google Sheets
 
 ---
@@ -87,8 +87,8 @@ Stores reader comments: author, content, timestamp.
 ---
 
 ## 📬 Contact
-**ubagyan**  
-[LinkedIn](https://www.linkedin.com/in/han-htet-s-185a9b2ab/) | [GitHub](https://github.com/ubagyan)
+**hanhtetsan**  
+[LinkedIn](https://www.linkedin.com/in/han-san) | [GitHub](https://github.com/drhanhtetsan)
 
 ---
 
