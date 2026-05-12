@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 
 
-FORBIDDEN_TAGS = [r"<script[\\s>]", r"<iframe[\\s>]", r"onerror=", r"onload="]
+FORBIDDEN_TAGS = [r"<script[\s>]", r"<iframe[\s>]", r"onerror=", r"onload="]
 
 
 def validate_html_content(html: str) -> list[str]:

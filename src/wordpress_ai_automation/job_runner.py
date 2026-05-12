@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import csv
 from datetime import datetime, timezone
 import logging
+from pathlib import Path
 
 from .ai_service import AIService
 from .alerts import send_slack_alert
@@ -164,9 +166,6 @@ def sync_comments(settings: Settings) -> int:
         user_agent=settings.user_agent,
     )
     comments = wp_client.sync_comments()
-
-    import csv
-    from pathlib import Path
 
     path = Path(settings.comments_csv_path)
     path.parent.mkdir(parents=True, exist_ok=True)

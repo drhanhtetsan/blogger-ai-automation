@@ -25,8 +25,8 @@ class WordPressClient:
     @staticmethod
     def slugify(value: str) -> str:
         value = re.sub(r"<[^>]*>", "", value)
-        value = re.sub(r"[^a-zA-Z0-9\\s-]", "", value).strip().lower()
-        value = re.sub(r"[\\s_-]+", "-", value)
+        value = re.sub(r"[^a-zA-Z0-9\s-]", "", value).strip().lower()
+        value = re.sub(r"[\s_-]+", "-", value)
         return value or "post"
 
     def _request(self, method: str, path: str, payload: dict | None = None, headers: dict | None = None) -> dict | list:
