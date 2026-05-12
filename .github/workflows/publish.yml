@@ -1,0 +1,62 @@
+name: Publish WordPress Content
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment name"
+        required: true
+        default: "dev"
+      command:
+        description: "Command to run"
+        required: true
+        default: "run"
+        type: choice
+        options:
+          - run
+          - sync-comments
+  schedule:
+    - cron: "0 9 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Write environment file
+        run: |
+          mkdir -p config/environments
+          cat <<EOT > config/environments/prod.env
+          GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+          PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}
+          WORDPRESS_URL=${{ secrets.WORDPRESS_URL }}
+          WORDPRESS_USERNAME=${{ secrets.WORDPRESS_USERNAME }}
+          WORDPRESS_APP_PASSWORD=${{ secrets.WORDPRESS_APP_PASSWORD }}
+          WORDPRESS_DEFAULT_CATEGORIES=${{ vars.WORDPRESS_DEFAULT_CATEGORIES || 'Automation' }}
+          WORDPRESS_POST_STATUS=${{ vars.WORDPRESS_POST_STATUS || 'publish' }}
+          DRY_RUN=${{ vars.DRY_RUN || 'false' }}
+          TRACKING_CSV_PATH=config/topics.csv
+          COMMENTS_CSV_PATH=config/comments.csv
+          BATCH_SIZE=${{ vars.BATCH_SIZE || '5' }}
+          MAX_RETRIES=${{ vars.MAX_RETRIES || '4' }}
+          REQUEST_TIMEOUT=${{ vars.REQUEST_TIMEOUT || '30' }}
+          SLACK_WEBHOOK_URL=${{ secrets.SLACK_WEBHOOK_URL }}
+          USER_AGENT=wordpress-ai-automation/1.0
+          EOT
+
+      - name: Run automation
+        env:
+          PYTHONPATH: src
+          RUN_ENV: ${{ github.event.inputs.environment || 'prod' }}
+          RUN_COMMAND: ${{ github.event.inputs.command || 'run' }}
+        run: python -m wordpress_ai_automation --env "$RUN_ENV" "$RUN_COMMAND"
